@@ -3,42 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Админ — TurkiyaModa</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <title>Админка TurkiyaModa</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    main {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+    form {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(44, 62, 80, 0.1);
+      padding: 30px 40px;
+      max-width: 450px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+    form:hover {
+      box-shadow: 0 12px 24px rgba(44, 62, 80, 0.15);
+    }
+    label {
+      font-weight: 600;
+      color: #34495e;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 1rem;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    textarea {
+      border: 2px solid #bdc3c7;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 1rem;
+      transition: border-color 0.25s ease;
+      width: 100%;
+      font-family: inherit;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="file"]:focus,
+    textarea:focus {
+      border-color: #2980b9;
+      outline: none;
+      box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+    button {
+      background-color: #2980b9;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1.1rem;
+      padding: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #1c5980;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      background: #ecf0f1;
+      margin-top: auto;
+      user-select: none;
+    }
+    @media(max-width: 500px) {
+      main {
+        padding: 20px 10px;
+      }
+      form {
+        padding: 25px 20px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <nav class="navbar">
-      <h1 class="logo">TurkiyaModa</h1>
-      <ul class="nav-links">
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="catalog.html">Каталог</a></li>
-        <li><a href="about.html">О нас</a></li>
-        <li><a href="delivery.html">Доставка</a></li>
-        <li><a href="#contact">Контакты</a></li>
-        <li><a href="admin.html">Админ</a></li>
-      </ul>
-    </nav>
+    Панель администратора — TurkiyaModa
   </header>
   <main>
-    <section>
-      <form class="admin-form" id="adminForm">
-        <h2>Добавить товар</h2>
-        <label for="name">Название</label>
-        <input type="text" id="name" required />
-        <label for="desc">Описание</label>
-        <textarea id="desc" rows="3" required></textarea>
-        <label for="price">Цена (сомони)</label>
-        <input type="number" id="price" min="0" step="0.01" required />
-        <label for="img">Фото товара</label>
-        <input type="file" id="img" accept="image/*" required />
-        <button type="submit">Добавить товар</button>
-      </form>
-    </section>
+    <form id="adminForm">
+      <label for="name">Название товара</label>
+      <input type="text" id="name" required placeholder="Введите название товара" />
+
+      <label for="desc">Описание</label>
+      <textarea id="desc" required placeholder="Краткое описание товара"></textarea>
+
+      <label for="price">Цена (₽)</label>
+      <input type="number" id="price" min="0" step="0.01" required placeholder="Введите цену" />
+
+      <label for="img">Фото товара</label>
+      <input type="file" id="img" accept="image/*" required />
+
+      <button type="submit">Добавить товар</button>
+    </form>
   </main>
   <footer>
-    <p>&copy; 2025 TurkiyaModa. Все права защищены.</p>
+    &copy; 2025 TurkiyaModa. Все права защищены.
   </footer>
 
   <script>
@@ -59,7 +154,6 @@
 
       const file = imgInput.files[0];
 
-      // Конвертируем фото в base64 (dataURL)
       const toBase64 = file => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -69,18 +163,15 @@
 
       const imgDataUrl = await toBase64(file);
 
-      // Получаем текущий массив товаров
+      // Сохраняем в localStorage (пример, в реальном приложении — отправлять на сервер)
       let products = JSON.parse(localStorage.getItem('turkiyamoda-products') || '[]');
 
-      // Добавляем новый товар
       products.push({name, desc, price: price.toFixed(2), img: imgDataUrl});
 
-      // Сохраняем обратно в localStorage
       localStorage.setItem('turkiyamoda-products', JSON.stringify(products));
 
       alert(`Товар "${name}" добавлен!`);
 
-      // Сбрасываем форму
       form.reset();
     });
   </script>
