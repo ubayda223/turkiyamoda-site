@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Заказать — TurkiyaModa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .container {
+      max-width: 480px;
+      margin: 2rem auto;
+      background: #1e1e1e;
+      padding: 2rem;
+      border-radius: 12px;
+      animation: fadeIn 1.2s ease;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      color: #ddd;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.4rem;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #333;
+      color: white;
+    }
+    .btn-order {
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.2rem;
+      background: #ff5722;
+      border: none;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 8px;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    .btn-order:hover {
+      background: #e64a19;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <h1 class="logo">TurkiyaModa</h1>
+      <ul class="nav-links">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="catalog.html">Каталог</a></li>
+        <li><a href="about.html">О нас</a></li>
+        <li><a href="delivery.html">Доставка</a></li>
+        <li><a href="#contact">Контакты</a></li>
+        <li><a href="order.html">Заказать</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="container">
+      <h1>Заказ товара</h1>
+      <form id="orderForm">
+        <label for="product">Выберите товар</label>
+        <select id="product" name="product" required>
+          <option value="" disabled selected>Выберите товар</option>
+          <option>Мужская куртка</option>
+          <option>Женское платье</option>
+          <option>Детский комплект</option>
+        </select>
+
+        <label for="name">Ваше имя</label>
+        <input type="text" id="name" name="name" placeholder="Введите имя" required />
+
+        <label for="phone">Номер телефона</label>
+        <input type="tel" id="phone" name="phone" placeholder="+992 900 123 456" pattern="^\+?\d{9,15}$" required />
+
+        <label for="comments">Комментарий (опционально)</label>
+        <textarea id="comments" name="comments" rows="3" placeholder="Ваши пожелания"></textarea>
+
+        <button type="submit" class="btn-order">Отправить заказ</button>
+      </form>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 TurkiyaModa. Все права защищены.</p>
+  </footer>
+
+  <script>
+    const telegramUsername = "Ubayda_1507";
+    const whatsappNumber = "+992905746633";
+
+    document.getElementById('orderForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const product = this.product.value;
+      const name = this.name.value.trim();
+      const phone = this.phone.value.trim();
+      const comments = this.comments.value.trim();
+
+      if (!product || !name || !phone) {
+        alert("Пожалуйста, заполните все обязательные поля.");
+        return;
+      }
+
+      // Формируем сообщение для заказа
+      let message = `Заказ с сайта TurkiyaModa:%0A`;
+      message += `Товар: ${product}%0A`;
+      message += `Имя: ${name}%0A`;
+      message += `Телефон: ${phone}%0A`;
+      if (comments) message += `Комментарий: ${comments}%0A`;
+
+      // Ссылки для Telegram и WhatsApp
+      const telegramLink = `https://t.me/${telegramUsername}?text=${message}`;
+      const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${message}`;
+
+      // Спрашиваем у пользователя, куда отправить заказ
+      const sendVia = prompt("Отправить заказ через:\n1 — Telegram\n2 — WhatsApp\nВведите 1 или 2:");
+
+      if (sendVia === "1") {
+        window.open(telegramLink, "_blank");
+      } else if (sendVia === "2") {
+        window.open(whatsappLink, "_blank");
+      } else {
+        alert("Заказ отменён.");
+      }
+    });
+
+    // Подставляем товар из параметра URL, если есть
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const productParam = params.get('product');
+      if (productParam) {
+        const select = document.getElementById('product');
+        for (let option of select.options) {
+          if (option.value === productParam) {
+            option.selected = true;
+            break;
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
