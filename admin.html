@@ -5,109 +5,355 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Админка TurkiyaModa</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       margin: 0;
       padding: 0;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
+
     header {
-      background: #2c3e50;
-      color: #ecf0f1;
-      padding: 20px 40px;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 25px 40px;
       text-align: center;
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 700;
-      letter-spacing: 1.2px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      letter-spacing: 1.5px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
     }
-    main {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 40px 20px;
-    }
-    form {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(44, 62, 80, 0.1);
-      padding: 30px 40px;
-      max-width: 450px;
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
       width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .container {
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .form-section, .products-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      padding: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .form-section:hover, .products-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 25px;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+
+    form {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      transition: box-shadow 0.3s ease;
     }
-    form:hover {
-      box-shadow: 0 12px 24px rgba(44, 62, 80, 0.15);
+
+    .input-group {
+      position: relative;
     }
+
     label {
       font-weight: 600;
-      color: #34495e;
-      margin-bottom: 6px;
+      color: #2c3e50;
+      margin-bottom: 8px;
       display: block;
       font-size: 1rem;
+      transition: color 0.3s ease;
     }
+
     input[type="text"],
     input[type="number"],
     input[type="file"],
-    textarea {
-      border: 2px solid #bdc3c7;
-      border-radius: 8px;
-      padding: 10px 15px;
+    textarea,
+    select {
+      border: 2px solid #e0e6ed;
+      border-radius: 12px;
+      padding: 15px 20px;
       font-size: 1rem;
-      transition: border-color 0.25s ease;
+      transition: all 0.3s ease;
       width: 100%;
       font-family: inherit;
+      background: white;
     }
+
     input[type="text"]:focus,
     input[type="number"]:focus,
     input[type="file"]:focus,
-    textarea:focus {
-      border-color: #2980b9;
+    textarea:focus,
+    select:focus {
+      border-color: #667eea;
       outline: none;
-      box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+      transform: translateY(-2px);
     }
+
     textarea {
       resize: vertical;
-      min-height: 80px;
+      min-height: 100px;
       font-family: inherit;
     }
+
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+
+    .file-input-label {
+      border: 2px dashed #e0e6ed;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      background: #fafbfc;
+    }
+
+    .file-input-label:hover {
+      border-color: #667eea;
+      background: #f0f2ff;
+    }
+
+    .file-input-label.has-file {
+      border-color: #27ae60;
+      background: #f0fff4;
+      color: #27ae60;
+    }
+
     button {
-      background-color: #2980b9;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       color: white;
       font-size: 1.1rem;
-      padding: 14px;
+      padding: 18px;
       font-weight: 700;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
+
     button:hover {
-      background-color: #1c5980;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
     }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      background: #f8f9fa;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-name {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+
+    .product-price {
+      color: #e74c3c;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover .delete-btn {
+      opacity: 1;
+    }
+
+    .delete-btn:hover {
+      background: #c0392b;
+      transform: scale(1.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #7f8c8d;
+      font-style: italic;
+      padding: 40px 20px;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #27ae60;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.error {
+      background: #e74c3c;
+    }
+
     footer {
       text-align: center;
-      padding: 15px;
+      padding: 20px;
       font-size: 0.9rem;
-      color: #7f8c8d;
-      background: #ecf0f1;
-      margin-top: auto;
-      user-select: none;
+      color: rgba(255,255,255,0.8);
+      background: rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
     }
-    @media(max-width: 500px) {
-      main {
+
+    @media(max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
         padding: 20px 10px;
+        gap: 20px;
       }
-      form {
-        padding: 25px 20px;
+      
+      header {
+        font-size: 1.5rem;
+        padding: 20px;
       }
+      
+      .form-section, .products-section {
+        padding: 20px;
+      }
+    }
+
+    /* Прелоадер */
+    .loading {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -115,64 +361,254 @@
   <header>
     Панель администратора — TurkiyaModa
   </header>
-  <main>
-    <form id="adminForm">
-      <label for="name">Название товара</label>
-      <input type="text" id="name" required placeholder="Введите название товара" />
+  
+  <div class="container">
+    <div class="form-section">
+      <h2 class="section-title">Добавить товар</h2>
+      <form id="adminForm">
+        <div class="input-group">
+          <label for="name">Название товара</label>
+          <input type="text" id="name" required placeholder="Введите название товара" />
+        </div>
 
-      <label for="desc">Описание</label>
-      <textarea id="desc" required placeholder="Краткое описание товара"></textarea>
+        <div class="input-group">
+          <label for="category">Категория</label>
+          <select id="category" required>
+            <option value="">Выберите категорию</option>
+            <option value="clothing">Одежда</option>
+            <option value="shoes">Обувь</option>
+            <option value="accessories">Аксессуары</option>
+            <option value="bags">Сумки</option>
+          </select>
+        </div>
 
-      <label for="price">Цена (₽)</label>
-      <input type="number" id="price" min="0" step="0.01" required placeholder="Введите цену" />
+        <div class="input-group">
+          <label for="desc">Описание</label>
+          <textarea id="desc" required placeholder="Краткое описание товара"></textarea>
+        </div>
 
-      <label for="img">Фото товара</label>
-      <input type="file" id="img" accept="image/*" required />
+        <div class="input-group">
+          <label for="price">Цена (₽)</label>
+          <input type="number" id="price" min="0" step="0.01" required placeholder="Введите цену" />
+        </div>
 
-      <button type="submit">Добавить товар</button>
-    </form>
-  </main>
+        <div class="input-group">
+          <label for="img">Фото товара</label>
+          <div class="file-input-wrapper">
+            <input type="file" id="img" accept="image/*" required />
+            <label for="img" class="file-input-label" id="fileLabel">
+              📸 Выберите изображение<br>
+              <small>JPG, PNG, GIF до 5MB</small>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit">
+          ✨ Добавить товар
+        </button>
+      </form>
+    </div>
+
+    <div class="products-section">
+      <h2 class="section-title">Товары (<span id="productCount">0</span>)</h2>
+      <div id="productsGrid" class="products-grid">
+        <div class="empty-state">
+          Товары пока не добавлены
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     &copy; 2025 TurkiyaModa. Все права защищены.
   </footer>
 
-  <script>
-    const form = document.getElementById('adminForm');
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+  </div>
 
-    form.addEventListener('submit', async (e) => {
+  <div class="notification" id="notification"></div>
+
+  <script>
+    let products = [];
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+      setupFileInput();
+    });
+
+    // Загрузка товаров из памяти
+    function loadProducts() {
+      const stored = window.turkiyaProducts || [];
+      products = stored;
+      renderProducts();
+    }
+
+    // Сохранение товаров в память
+    function saveProducts() {
+      window.turkiyaProducts = products;
+    }
+
+    // Настройка загрузки файлов
+    function setupFileInput() {
+      const fileInput = document.getElementById('img');
+      const fileLabel = document.getElementById('fileLabel');
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 5 * 1024 * 1024) {
+            showNotification('Файл слишком большой! Максимум 5MB', 'error');
+            fileInput.value = '';
+            return;
+          }
+          fileLabel.classList.add('has-file');
+          fileLabel.innerHTML = `✅ ${file.name}<br><small>Файл выбран</small>`;
+        } else {
+          fileLabel.classList.remove('has-file');
+          fileLabel.innerHTML = '📸 Выберите изображение<br><small>JPG, PNG, GIF до 5MB</small>';
+        }
+      });
+    }
+
+    // Отображение товаров
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      const count = document.getElementById('productCount');
+      
+      count.textContent = products.length;
+
+      if (products.length === 0) {
+        grid.innerHTML = '<div class="empty-state">Товары пока не добавлены</div>';
+        return;
+      }
+
+      grid.innerHTML = products.map((product, index) => `
+        <div class="product-card">
+          <button class="delete-btn" onclick="deleteProduct(${index})">×</button>
+          <img src="${product.img}" alt="${product.name}" class="product-image" 
+               onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDIwMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiNmOGY5ZmEiLz48dGV4dCB4PSIxMDAiIHk9IjYwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2Yjc5ODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj5Фото</dGV4dD48L3N2Zz4='" />
+          <div class="product-info">
+            <div class="product-name">${product.name}</div>
+            <div class="product-price">${product.price} ₽</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Удаление товара
+    function deleteProduct(index) {
+      if (confirm('Удалить этот товар?')) {
+        const productName = products[index].name;
+        products.splice(index, 1);
+        saveProducts();
+        renderProducts();
+        showNotification(`Товар "${productName}" удален`);
+      }
+    }
+
+    // Показ уведомлений
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Показ загрузки
+    function showLoading() {
+      document.getElementById('loading').style.display = 'block';
+    }
+
+    function hideLoading() {
+      document.getElementById('loading').style.display = 'none';
+    }
+
+    // Обработка формы
+    document.getElementById('adminForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      showLoading();
 
       const name = document.getElementById('name').value.trim();
+      const category = document.getElementById('category').value;
       const desc = document.getElementById('desc').value.trim();
       const price = parseFloat(document.getElementById('price').value);
       const imgInput = document.getElementById('img');
 
-      if (!name || !desc || isNaN(price) || price < 0 || imgInput.files.length === 0) {
-        alert('Пожалуйста, заполните все поля корректно');
+      // Валидация
+      if (!name || !category || !desc || isNaN(price) || price < 0) {
+        hideLoading();
+        showNotification('Пожалуйста, заполните все поля корректно', 'error');
+        return;
+      }
+
+      if (imgInput.files.length === 0) {
+        hideLoading();
+        showNotification('Пожалуйста, выберите изображение', 'error');
         return;
       }
 
       const file = imgInput.files[0];
 
-      const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
+      try {
+        // Конвертация в base64
+        const toBase64 = file => new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+
+        const imgDataUrl = await toBase64(file);
+
+        // Добавление товара
+        const newProduct = {
+          id: Date.now(),
+          name,
+          category,
+          desc,
+          price: price.toFixed(2),
+          img: imgDataUrl,
+          createdAt: new Date().toISOString()
+        };
+
+        products.unshift(newProduct);
+        saveProducts();
+        renderProducts();
+
+        // Сброс формы
+        document.getElementById('adminForm').reset();
+        document.getElementById('fileLabel').classList.remove('has-file');
+        document.getElementById('fileLabel').innerHTML = '📸 Выберите изображение<br><small>JPG, PNG, GIF до 5MB</small>';
+
+        hideLoading();
+        showNotification(`Товар "${name}" успешно добавлен!`);
+
+      } catch (error) {
+        hideLoading();
+        showNotification('Ошибка при обработке изображения', 'error');
+        console.error('Error:', error);
+      }
+    });
+
+    // Анимация при скролле
+    window.addEventListener('scroll', () => {
+      const cards = document.querySelectorAll('.product-card');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        
+        if (isVisible) {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }
       });
-
-      const imgDataUrl = await toBase64(file);
-
-      // Сохраняем в localStorage (пример, в реальном приложении — отправлять на сервер)
-      let products = JSON.parse(localStorage.getItem('turkiyamoda-products') || '[]');
-
-      products.push({name, desc, price: price.toFixed(2), img: imgDataUrl});
-
-      localStorage.setItem('turkiyamoda-products', JSON.stringify(products));
-
-      alert(`Товар "${name}" добавлен!`);
-
-      form.reset();
     });
   </script>
 </body>
