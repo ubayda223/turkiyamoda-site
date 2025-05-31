@@ -17,40 +17,44 @@
         <li><a href="about.html">О нас</a></li>
         <li><a href="delivery.html">Доставка</a></li>
         <li><a href="#contact">Контакты</a></li>
-        <li><a href="order.html">Заказать</a></li>
+        <li><a href="admin.html">Админ</a></li>
       </ul>
     </nav>
   </header>
   <main>
-    <section class="container">
-      <h1>Каталог товаров</h1>
-      <div class="products">
-        <div class="product">
-          <img src="https://via.placeholder.com/200" alt="Мужская куртка" />
-          <h3>Мужская куртка</h3>
-          <p>Цена: 350 сомони</p>
-          <a href="order.html?product=Мужская куртка" class="btn order-btn">Заказать</a>
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/200" alt="Женское платье" />
-          <h3>Женское платье</h3>
-          <p>Цена: 270 сомони</p>
-          <a href="order.html?product=Женское платье" class="btn order-btn">Заказать</a>
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/200" alt="Детский комплект" />
-          <h3>Детский комплект</h3>
-          <p>Цена: 190 сомони</p>
-          <a href="order.html?product=Детский комплект" class="btn order-btn">Заказать</a>
-        </div>
-      </div>
+    <section>
+      <h2 style="text-align:center; margin-top: 1.5rem; color:#ff6f61;">Каталог товаров</h2>
+      <div class="catalog" id="catalog"></div>
     </section>
   </main>
   <footer>
     <p>&copy; 2025 TurkiyaModa. Все права защищены.</p>
   </footer>
+
   <script>
-    // Можно добавить фильтры и поиск — скажи, если надо
+    // Загружаем товары из localStorage
+    const catalogEl = document.getElementById('catalog');
+    const products = JSON.parse(localStorage.getItem('turkiyamoda-products') || '[]');
+
+    function renderCatalog() {
+      catalogEl.innerHTML = '';
+      if(products.length === 0) {
+        catalogEl.innerHTML = '<p style="color:#ccc; text-align:center;">Товары отсутствуют. Зайдите в админку и добавьте.</p>';
+        return;
+      }
+      products.forEach(({name, desc, price, img}) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${img}" alt="${name}" />
+          <h3>${name}</h3>
+          <p>${desc}</p>
+          <p class="price">${price} сомони</p>
+        `;
+        catalogEl.appendChild(card);
+      });
+    }
+    renderCatalog();
   </script>
 </body>
 </html>
